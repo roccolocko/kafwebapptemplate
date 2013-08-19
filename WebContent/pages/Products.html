@@ -1,0 +1,52 @@
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Productos</title>
+<script type="text/javascript" src="../javascript/kaf.js"></script>
+<script type="text/javascript" src="../javascript/prototype.js"></script>
+<script type='text/javascript' src='/kaftemplate/dwr/engine.js'></script>
+<script type='text/javascript'
+	src='/kaftemplate/dwr/interface/ProductService.js'></script>
+<link rel="stylesheet" type="text/css" href="../css/kaf-standar.css">
+</head>
+<body>
+	<div id="productsTableDiv"></div>
+	<form class="form-wrapper" style="width: 480px;">
+		<input type="text" id="nombre" placeholder="Nombre">
+		<input type="text" id="descripcion" placeholder="Descripción">
+		<div id="addButtonDiv"></div>
+	</form>
+	
+</body>
+<script type="text/javascript">
+
+	function saveProduct(){
+		var product = {};
+		product.name = $('nombre').value;
+		product.description = $('descripcion').value;
+		ProductService.save(product);
+		loadProductsTable();
+		
+	}
+	
+	function loadProductsTable(){
+		if($('productsTableDiv').firstChild != null)
+			$('productsTableDiv').removeChild($('productsTableDiv').firstChild);
+		
+		ProductService.getAll({
+			  callback:function(products) { 
+				  KafJS.createTable("productsTable",products, "productsTableDiv", columnProperties); 
+				  }
+				});
+	}
+	
+	var columnProperties = [{"name":"name","label":"Nombre"},
+	                        {"name":"description", "label":"Descripción"}];
+	
+	
+
+	KafJS.createButton("addButton", "Agregar", "add", "saveProduct();", "addButtonDiv")
+	
+	loadProductsTable();
+</script>
+</html>
