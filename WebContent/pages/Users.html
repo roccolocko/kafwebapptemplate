@@ -1,0 +1,52 @@
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Usuarios</title>
+<script type="text/javascript" src="../javascript/kaf.js"></script>
+<script type="text/javascript" src="../javascript/prototype.js"></script>
+<script type='text/javascript' src='/kaftemplate/dwr/engine.js'></script>
+<script type='text/javascript'
+	src='/kaftemplate/dwr/interface/UserService.js'></script>
+<link rel="stylesheet" type="text/css" href="../css/kaf-standar.css">
+</head>
+<body>
+	<div id="usersTableDiv"></div>
+	<form class="form-wrapper" style="width: 480px;">
+		<input type="text" id="username" placeholder="Usuario">
+		<input type="password" id="password" placeholder="Contraseña">
+		<div id="addButtonDiv"></div>
+	</form>
+	
+</body>
+<script type="text/javascript">
+
+	function saveUser(){
+		var user = {};
+		user.username = $('username').value;
+		user.password = $('password').value;
+		UserService.save(user);
+		loadUsersTable();
+		
+	}
+	
+	function loadUsersTable(){
+		if($('usersTableDiv').firstChild != null)
+			$('usersTableDiv').removeChild($('usersTableDiv').firstChild);
+		
+		UserService.getAll({
+			  callback:function(users) { 
+				  KafJS.createTable("usersTable",users, "usersTableDiv", columnProperties); 
+				  }
+				});
+	}
+	
+	var columnProperties = [{"name":"username","label":"Usuario"},
+	                        {"name":"password", "label":"Contraseña"}];
+	
+	
+
+	KafJS.createButton("addButton", "Agregar", "add", "saveUser();", "addButtonDiv")
+	
+	loadUsersTable();
+</script>
+</html>
