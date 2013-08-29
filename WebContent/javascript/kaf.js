@@ -25,7 +25,18 @@ var KafJS = new function(){
 			var tr = document.createElement("tr");
 			for(var j=0; j<includeColumns.length;j++){
 					var td = document.createElement("td");
-					td.appendChild(document.createTextNode(json[i][includeColumns[j].name]));
+					if(includeColumns[j].type == "button"){
+						var button = document.createElement("button");
+						button.setAttribute("id", tableId + "_button_" + includeColumns[j].subType + "_" + json[i][includeColumns[j].name]);
+						button.appendChild(document.createTextNode(includeColumns[j].label));
+						button.setAttribute("class", (includeColumns[j].type != null)? "button " + includeColumns[j].subType : "button");
+						button.setAttribute("onclick",includeColumns[j].action + "('"+ json[i][includeColumns[j].name] +"');");
+						td.setAttribute("style","text-align: center;");
+						td.appendChild(button);
+					}
+					else{
+						td.appendChild(document.createTextNode(json[i][includeColumns[j].name]));
+					}
 					tr.appendChild(td);
 			
 			}		

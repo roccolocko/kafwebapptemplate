@@ -20,8 +20,12 @@ public class ProductService {
 		return (Product)productDao.getById(id);
 	}
 
-	public void update(Product product){
-		productDao.update(product);
+	public Boolean update(Product product){
+		return productDao.update(product);
+	}
+	
+	public Boolean deleteById(Long id){
+		return productDao.delete(id);
 	}
 	
 	public List<Object> getAll(){

@@ -130,12 +130,12 @@ public class DaoHelper {
 	
 	/**
 	 * Updates a record on the database given an object
-	 * @param object Objet that is going to be updated on the database
+	 * @param object Object that is going to be updated on the database
 	 */
-	public void update(Object object){
+	public Boolean update(Object object){
 		Session session = null;
 		Transaction transaction = null;
-		
+		Boolean commited = false;
 		try{
 
 			try{
@@ -153,6 +153,7 @@ public class DaoHelper {
 			
 			/* Guardamos hasta que todo haya estado OK */
 			transaction.commit();
+			commited = true;
 		}catch(Exception e){
 			/* Si hay algún error deshacemos el cambio*/
 			transaction.rollback();
@@ -164,6 +165,48 @@ public class DaoHelper {
 				session.close();
 			}
 		}
+		return commited;
+	}
+	
+	/**
+	 * Deletes an object from the database
+	 * @param id the id of the object to delete
+	 */
+	public Boolean delete(Long id){
+		Session session = null;
+		Transaction transaction = null;
+		Boolean commited = false;
+		try{
+
+			try{
+				/* Si existe una sesión la tomamos */
+				session = sessionFactory.getCurrentSession();
+			}catch(Exception e){
+				/* Si no existe hay que abrir una nueva */
+				session = sessionFactory.openSession();
+			}
+
+			transaction = session.beginTransaction();
+
+			/*Salvamos el objeto en base de datos*/
+			session.delete(getById(id));
+			
+			/* Guardamos hasta que todo haya estado OK */
+			transaction.commit();
+			commited = true;
+		
+		}catch(Exception e){
+			/* Si hay algún error deshacemos el cambio*/
+			transaction.rollback();
+			e.printStackTrace();
+		}finally{
+			if(session!=null){
+				/* Cerramos la sesión */
+				session.close();
+			}
+		}
+		
+		return commited;
 	}
 	
 	public List<Object> getAll(){

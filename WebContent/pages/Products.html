@@ -24,9 +24,16 @@
 		var product = {};
 		product.name = $('nombre').value;
 		product.description = $('descripcion').value;
-		ProductService.save(product);
-		loadProductsTable();
+		if(ProductService.save(product)){
+			loadProductsTable();
+		}
 		
+	}
+	
+	function deleteProduct(idProduct){
+		if(ProductService.deleteById(idProduct) == 'true'){
+			loadProductsTable();
+		}
 	}
 	
 	function loadProductsTable(){
@@ -40,8 +47,10 @@
 				});
 	}
 	
-	var columnProperties = [{"name":"name","label":"Nombre"},
-	                        {"name":"description", "label":"Descripción"}];
+	var columnProperties = [{"name":"name","label":"Nombre","type":"label"},
+	                        {"name":"description", "label":"Descripción","type":"label"},
+	                        {"name":"idProduct", "label":"Editar","type":"button","subType":"edit","action":"alert"},
+	                        {"name":"idProduct", "label":"Borrar","type":"button","subType":"delete","action":"deleteProduct"}];
 	
 	
 
